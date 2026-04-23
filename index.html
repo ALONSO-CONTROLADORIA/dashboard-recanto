@@ -10,59 +10,42 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--gold:#e8a020;--green:#27c97a;--blue:#3b82f6;--teal:#14b8a6;--muted:#8892a4;--card:#111827;--border:#1f2d40;--bg:#0a0f1e}
 html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
-
-/* Wrapper que contém as duas páginas */
 .dash{width:1280px;height:720px;position:absolute;top:50%;left:50%;transform-origin:center center;font-family:'Barlow',sans-serif;font-size:13px;color:#e8edf4}
-
-/* Cada página */
 .page{background:var(--bg);width:1280px;height:720px;padding:10px;display:none;flex-direction:column;gap:8px;position:absolute;top:0;left:0}
 .page.active{display:flex}
-
-/* Topbar */
 .topbar{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:6px;flex-shrink:0}
-
-/* Indicador de páginas */
 .page-dots{display:flex;gap:6px;align-items:center}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .3s}
 .dot.active{background:var(--gold)}
-
-/* Barra de progresso do timer */
 .progress-bar{height:2px;background:var(--border);width:100%;flex-shrink:0;border-radius:1px;overflow:hidden}
 .progress-fill{height:100%;background:var(--gold);width:0%;transition:width linear}
-
-/* KPIs */
 .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex-shrink:0}
 .kpi{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;display:flex;flex-direction:column;justify-content:center}
 .kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
 .kpi-val{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:700;line-height:1.1}
 .badge{font-size:11px;font-weight:600;padding:1px 7px;border-radius:20px;background:#0d3320;color:var(--green)}
 
-/* Grid página 1 — confirmado pelas imagens
-   Col1: gráfico mensal (row1) | ranking+obras (row2)
-   Col2: tabela empreendimentos (row1+2 altura total)
+/* ===== GRID PÁGINA 1 =====
+   Col1 (320px): ranking (row1) | obras (row2)
+   Col2 (1fr):   gráfico mensal (row1) | tabela emp (row2)
 */
-.grid-p1{
-  display:grid;
-  grid-template-columns:320px 1fr;
-  grid-template-rows:1fr 1fr;
-  gap:8px;flex:1;min-height:0
-}
-.card-mes  {grid-column:1;grid-row:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column}
-.card-rank {grid-column:1;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
-.card-emp  {grid-column:2;grid-row:1/3;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;overflow:hidden;display:flex;flex-direction:column}
-.card-tend {display:none}
+.grid-p1{display:grid;grid-template-columns:320px 1fr;grid-template-rows:1fr 1fr;gap:8px;flex:1;min-height:0}
+.card-mes {grid-column:2;grid-row:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column}
+.card-rank{grid-column:1;grid-row:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.card-emp {grid-column:2;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;overflow:hidden;display:flex;flex-direction:column}
+.card-tend{display:none}
 .card-obras{display:none}
 
-/* Grid página 2 — VGV topo full + % baixo-esq + total baixo-dir + tendência baixo-esq */
-.grid-p2{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;flex:1;min-height:0}
-.card-vgv      {grid-column:1/3;grid-row:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;flex-direction:column}
-.card-vgv-pct  {grid-column:1;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column}
-.card-vgv-total{grid-column:2;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px}
-/* Tendência na p2 — substitui % baixo-esq */
-.card-tend-p2  {grid-column:1;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column;overflow:hidden}
+/* ===== GRID PÁGINA 2 =====
+   VGV gráfico (row1 full)
+   Tendência (row2 full width)
+*/
+.grid-p2{display:grid;grid-template-columns:1fr 380px;grid-template-rows:55% 45%;gap:8px;flex:1;min-height:0}
+.card-vgv     {grid-column:1/3;grid-row:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;flex-direction:column}
+.card-tend-p2 {grid-column:1/3;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;display:flex;flex-direction:column;overflow:hidden}
+.card-vgv-total{display:none}
 
-/* Títulos dos cards */
-.ctitle{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.ctitle{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .ctitle b{font-family:'Barlow Condensed',sans-serif;font-size:14px;color:#fff;font-weight:700;text-transform:none;letter-spacing:0}
 
 /* Obras */
@@ -86,6 +69,10 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 .tend-tbl td{padding:3px 5px;border-bottom:1px solid rgba(31,45,64,0.4);vertical-align:middle;font-size:11px}
 .bar-tend{height:7px;border-radius:3px;display:inline-block;vertical-align:middle}
 .pct-badge{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;display:inline-block}
+/* Tendência página 2 — sem scroll, fonte menor para caber 13 linhas */
+.tend-tbl-p2{width:100%;border-collapse:collapse}
+.tend-tbl-p2 th{font-weight:700;color:#fff;padding:2px 8px;border-bottom:1px solid var(--border);text-align:left;font-size:11px}
+.tend-tbl-p2 td{padding:2px 8px;border-bottom:1px solid rgba(31,45,64,0.3);vertical-align:middle;font-size:11px}
 
 /* Ranking */
 .ranking{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
@@ -98,15 +85,14 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 .rank-bar-bg{height:3px;background:#1f2d40;border-radius:2px;margin-top:2px}
 .rank-bar-fill{height:100%;border-radius:2px}
 
-/* VGV % atingido */
+/* VGV pct */
 .vgv-pct-grid{display:flex;flex-direction:column;gap:7px;flex:1}
 .vgv-pct-row{display:flex;align-items:center;gap:8px}
 .vgv-pct-nome{font-size:12px;color:#fff;font-weight:700;width:85px;flex-shrink:0}
-.vgv-pct-bar-bg{flex:1;height:10px;background:#1f2d40;border-radius:5px;overflow:hidden;position:relative}
+.vgv-pct-bar-bg{flex:1;height:10px;background:#1f2d40;border-radius:5px;overflow:hidden}
 .vgv-pct-bar-fill{height:100%;border-radius:5px}
 .vgv-pct-val{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;width:38px;text-align:right;color:#fff}
 
-/* Loading */
 .loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99;gap:16px}
 .spinner{width:40px;height:40px;border:3px solid var(--border);border-top:3px solid var(--gold);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -149,16 +135,26 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
       </div>
     </div>
     <div class="grid-p1">
-      <div class="card-mes">
-        <div class="ctitle">Vendas por mês — quantidade <b>Real | Meta</b></div>
-        <div style="flex:1;position:relative;min-height:0"><canvas id="chartMes"></canvas></div>
-      </div>
+      <!-- Col 1 Row 1: Ranking -->
       <div class="card-rank">
         <div class="ctitle">Ranking de vendas <b>por empreendimento</b></div>
-        <div class="ranking" id="rankingGrid" style="margin-bottom:10px"></div>
-        <div class="ctitle" style="margin-top:4px">Evolução obras <b>Fev/2026</b></div>
+        <div class="ranking" id="rankingGrid"></div>
+      </div>
+      <!-- Col 2 Row 1: Gráfico mensal -->
+      <div class="card-mes">
+        <div class="ctitle">Vendas por mês — quantidade <b>Real | Meta</b></div>
+        <div style="display:flex;gap:14px;margin-bottom:4px;font-size:11px;color:var(--muted);flex-shrink:0">
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#e8a020;display:inline-block"></span>Realizado</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(59,130,246,0.4);border:1px solid #3b82f6;display:inline-block"></span>Meta</span>
+        </div>
+        <div style="flex:1;position:relative;min-height:0"><canvas id="chartMes"></canvas></div>
+      </div>
+      <!-- Col 1 Row 2: Obras -->
+      <div style="grid-column:1;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column;overflow:hidden">
+        <div class="ctitle">Evolução obras <b>Fev/2026</b></div>
         <div class="obras-grid" id="obrasGrid" style="flex:1"></div>
       </div>
+      <!-- Col 2 Row 2: Tabela empreendimentos -->
       <div class="card-emp">
         <div class="ctitle">Vendas por empreendimento por mês <b>Real (Meta)</b></div>
         <div style="flex:1;overflow:hidden">
@@ -197,20 +193,22 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
       </div>
     </div>
     <div class="grid-p2">
+      <!-- VGV gráfico topo full width -->
       <div class="card-vgv">
         <div class="ctitle">VGV por empreendimento <b>R$ milhões — 2026</b></div>
         <div style="flex:1;position:relative;min-height:0"><canvas id="chartVGV"></canvas></div>
       </div>
+      <!-- Tendência baixo full width -->
       <div class="card-tend-p2">
         <div class="ctitle">Tendência — realizado × meta <b>Jan–Dez 2026</b></div>
-        <div style="flex:1;overflow:auto">
-          <table class="tend-tbl" style="width:100%">
-            <thead><tr><th>Mês</th><th>Real</th><th>Meta</th><th>Ating.</th><th>Tend.</th></tr></thead>
-            <tbody id="tendBody"></tbody>
-          </table>
-        </div>
+        <table class="tend-tbl-p2" style="width:100%">
+          <thead><tr><th>Mês</th><th>Real</th><th>Meta</th><th>Ating.</th><th>Tendência</th></tr></thead>
+          <tbody id="tendBody"></tbody>
+        </table>
       </div>
+      <!-- VGV total baixo direita -->
       <div class="card-vgv-total">
+        <div id="vgvPctGrid" style="display:none"></div>
         <div style="text-align:center">
           <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">VGV Acumulado 2026</div>
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:56px;font-weight:700;color:var(--gold);line-height:1" id="vgv-big">--</div>
@@ -236,6 +234,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 </div>
 
 <script>
+
 const SID='1WAy449o_Dd2dIBP-45BbQNZ7UNV0wrvaVyXASAnf5Rw';
 const GID_BASE ='1098648263';
 const GID_BVB  ='658379198';

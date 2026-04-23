@@ -26,13 +26,14 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 .badge{font-size:11px;font-weight:600;padding:1px 7px;border-radius:20px;background:#0d3320;color:var(--green)}
 
 /* ===== GRID PÁGINA 1 =====
+   Mesma estrutura da p2: flex:1 + min-height:0
    Col1 (320px): ranking (row1) | obras (row2)
    Col2 (1fr):   gráfico mensal (row1) | tabela emp (row2)
 */
-.grid-p1{display:grid;grid-template-columns:320px 1fr;grid-template-rows:1fr 1fr;gap:8px;flex:1;min-height:0}
-.card-mes {grid-column:2;grid-row:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column}
-.card-rank{grid-column:1;grid-row:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
-.card-emp {grid-column:2;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;overflow:hidden;display:flex;flex-direction:column}
+.grid-p1{display:grid;grid-template-columns:300px 1fr;grid-template-rows:48% 52%;gap:6px;flex:1;min-height:0;overflow:hidden}
+.card-mes {grid-column:2;grid-row:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;flex-direction:column;overflow:hidden}
+.card-rank{grid-column:1;grid-row:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.card-emp {grid-column:2;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px;overflow:hidden;display:flex;flex-direction:column}
 .card-tend{display:none}
 .card-obras{display:none}
 
@@ -75,13 +76,13 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 .tend-tbl-p2 td{padding:1px 8px;border-bottom:1px solid rgba(31,45,64,0.3);vertical-align:middle;font-size:11px}
 
 /* Ranking */
-.ranking{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.rank-card{background:#0d1628;border:1px solid var(--border);border-radius:6px;padding:8px 10px;display:flex;align-items:center;gap:7px}
-.rank-pos{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--muted);width:26px;flex-shrink:0}
+.ranking{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
+.rank-card{background:#0d1628;border:1px solid var(--border);border-radius:6px;padding:6px 8px;display:flex;align-items:center;gap:5px;min-width:0}
+.rank-pos{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--muted);width:18px;flex-shrink:0}
 .rank-pos.p1{color:var(--gold)}.rank-pos.p2{color:#94a3b8}.rank-pos.p3{color:#fb923c}
 .rank-info{flex:1;min-width:0}
-.rank-nome{font-size:13px;color:#e8edf4;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rank-val{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700}
+.rank-nome{font-size:11px;color:#e8edf4;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-val{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700}
 .rank-bar-bg{height:3px;background:#1f2d40;border-radius:2px;margin-top:2px}
 .rank-bar-fill{height:100%;border-radius:2px}
 
@@ -150,7 +151,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
         <div style="flex:1;position:relative;min-height:0"><canvas id="chartMes"></canvas></div>
       </div>
       <!-- Col 1 Row 2: Obras -->
-      <div style="grid-column:1;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column;overflow:hidden">
+      <div style="grid-column:1;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;flex-direction:column;overflow:hidden">
         <div class="ctitle">Evolução obras <b>Fev/2026</b></div>
         <div class="obras-grid" id="obrasGrid" style="flex:1"></div>
       </div>
@@ -540,4 +541,5 @@ init();
 </script>
 </body>
 </html>
+
 

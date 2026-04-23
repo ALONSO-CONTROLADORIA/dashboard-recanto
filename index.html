@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Recanto Construtora 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#e8a020;--green:#27c97a;--blue:#3b82f6;--teal:#14b8a6;--muted:#8892a4;--card:#111827;--border:#1f2d40;--bg:#0a0f1e}
+html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
+.dash{background:var(--bg);color:#e8edf4;padding:10px;width:1280px;height:720px;display:grid;grid-template-rows:44px 72px 200px 1fr 175px;grid-template-columns:1fr 1.1fr 290px;gap:8px;font-family:'Barlow',sans-serif;font-size:13px;position:absolute;top:50%;left:50%;transform-origin:center center}
+.topbar{grid-column:1/4;grid-row:1;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:6px}
+.kpis{grid-column:1/4;grid-row:2;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;display:flex;flex-direction:column;justify-content:center}
+.kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.kpi-val{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:700;line-height:1.1}
+.badge{font-size:11px;font-weight:600;padding:1px 7px;border-radius:20px;background:#0d3320;color:var(--green)}
+.card-mes{grid-column:1;grid-row:3;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px}
+.card-rank{grid-column:1;grid-row:4;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px}
+.card-emp{grid-column:2;grid-row:3;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;overflow:hidden}
+.card-obras{grid-column:2;grid-row:4;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px}
+.card-tend{grid-column:3;grid-row:3/5;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px}
+.card-vgv{grid-column:1/4;grid-row:5;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;flex-direction:column}
+.ctitle{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.ctitle b{font-family:'Barlow Condensed',sans-serif;font-size:14px;color:#fff;font-weight:700;text-transform:none;letter-spacing:0}
+.obras-grid{display:flex;flex-direction:column;gap:8px}
+.obra-row{display:flex;align-items:center;gap:8px}
+.obra-nome{font-size:12px;color:#fff;font-weight:700;width:100px;flex-shrink:0}
+.obra-bar-bg{flex:1;height:8px;background:#1f2d40;border-radius:4px;overflow:hidden}
+.obra-bar-fill{height:100%;border-radius:4px}
+.obra-pct{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;width:44px;text-align:right;color:#fff}
+.tbl{width:100%;border-collapse:collapse;font-size:11px}
+.tbl th{font-weight:700;color:#fff;text-align:center;padding:3px 2px;border-bottom:1px solid var(--border);font-size:10px}
+.tbl th:first-child{text-align:left}
+.tbl td{text-align:center;padding:2px 2px;border-bottom:1px solid rgba(31,45,64,0.4);font-size:11px}
+.tbl td:first-child{text-align:left;color:#c4cdd8}
+.tend-tbl{width:100%;border-collapse:collapse;font-size:11px}
+.tend-tbl th{font-weight:700;color:#fff;padding:4px 5px;border-bottom:1px solid var(--border);text-align:left;font-size:10px}
+.tend-tbl td{padding:4px 5px;border-bottom:1px solid rgba(31,45,64,0.4);vertical-align:middle;font-size:11px}
+.bar-tend{height:7px;border-radius:3px;display:inline-block;vertical-align:middle}
+.pct-badge{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;display:inline-block}
+.ranking{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.rank-card{background:#0d1628;border:1px solid var(--border);border-radius:6px;padding:6px 8px;display:flex;align-items:center;gap:6px}
+.rank-pos{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--muted);width:22px;flex-shrink:0}
+.rank-pos.p1{color:var(--gold)}.rank-pos.p2{color:#94a3b8}.rank-pos.p3{color:#fb923c}
+.rank-info{flex:1;min-width:0}
+.rank-nome{font-size:11px;color:#e8edf4;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-val{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700}
+.rank-bar-bg{height:3px;background:#1f2d40;border-radius:2px;margin-top:2px}
+.rank-bar-fill{height:100%;border-radius:2px}
+.loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99;gap:16px}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top:3px solid var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="loading" id="loading">
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;color:#fff">RECANTO <span style="color:var(--gold)">CONSTRUTORA</span></div>
+  <div class="spinner"></div>
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;color:var(--gold);letter-spacing:2px">Carregando dados...</div>
+  <div style="font-size:13px;color:var(--muted)" id="loading-status">Conectando ao Google Sheets</div>
+</div>
+<div class="dash" id="dash" style="display:none">
+  <div class="topbar">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;letter-spacing:3px;color:#fff">RECANTO <span style="color:var(--gold)">CONSTRUTORA</span></div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;color:var(--gold);letter-spacing:2px">DASHBOARD DE VENDAS 2026</div>
+    <div style="font-size:12px;color:var(--muted)" id="clock">--</div>
+  </div>
+  <div class="kpis">
+    <div class="kpi" style="border-top:2px solid var(--gold)">
+      <div class="kpi-label">Vendas realizadas</div>
+      <div class="kpi-val" style="color:var(--gold)"><span id="kpi-vendas">--</span> <span class="badge">Emitidos</span></div>
+    </div>
+    <div class="kpi" style="border-top:2px solid var(--teal)">
+      <div class="kpi-label">Projetado total 2026</div>
+      <div class="kpi-val" style="color:var(--teal)"><span id="kpi-proj">--</span> <span style="font-size:13px;color:var(--muted);font-family:'Barlow',sans-serif;font-weight:400">unidades</span></div>
+    </div>
+    <div class="kpi" style="border-top:2px solid #a78bfa">
+      <div class="kpi-label">Atingimento acumulado</div>
+      <div class="kpi-val" style="color:#a78bfa"><span id="kpi-ating">--</span> <span style="font-size:13px;color:var(--muted);font-family:'Barlow',sans-serif;font-weight:400" id="kpi-sub">--</span></div>
+    </div>
+  </div>
+  <div class="card-mes">
+    <div class="ctitle">Vendas por mês — quantidade <b>Real | Meta</b></div>
+    <div style="position:relative;height:calc(100% - 32px)"><canvas id="chartMes"></canvas></div>
+  </div>
+  <div class="card-rank">
+    <div class="ctitle">Ranking de vendas <b>por empreendimento</b></div>
+    <div class="ranking" id="rankingGrid"></div>
+  </div>
+  <div class="card-emp">
+    <div class="ctitle">Vendas por empreendimento por mês <b>Real (Meta)</b></div>
+    <table class="tbl">
+      <thead><tr><th>Empreendimento</th><th>Jan</th><th>Fev</th><th>Mar</th><th>Abr</th><th>Mai</th><th>Jun</th><th>Jul</th><th>Ago</th><th>Set</th><th>Out</th><th>Nov</th><th>Dez</th><th>Total</th></tr></thead>
+      <tbody id="empBody"></tbody>
+    </table>
+  </div>
+  <div class="card-obras">
+    <div class="ctitle">Evolução obras — Fev/2026 <b>% concluído</b></div>
+    <div class="obras-grid" id="obrasGrid"></div>
+  </div>
+  <div class="card-tend">
+    <div class="ctitle">Tendência — realizado × meta <b>Jan–Dez 2026</b></div>
+    <table class="tend-tbl">
+      <thead><tr><th>Mês</th><th>Real</th><th>Meta</th><th>Ating.</th><th>Tend.</th></tr></thead>
+      <tbody id="tendBody"></tbody>
+    </table>
+  </div>
+  <div class="card-vgv">
+    <div class="ctitle" style="margin-bottom:4px">VGV por empreendimento <b>R$ milhões — 2026</b></div>
+    <div style="flex:1;position:relative"><canvas id="chartVGV"></canvas></div>
+  </div>
+</div>
+<script>
+const SID='1WAy449o_Dd2dIBP-45BbQNZ7UNV0wrvaVyXASAnf5Rw';
+// GIDs confirmados
+const GID_BASE ='1098648263';
+const GID_BVB  ='658379198';
+const GID_OBRAS='1849109744';
+
+// BASEAPI — índices fixos confirmados pelo diagnóstico (colunas A..AQ)
+// Col 0=id, 1=number, 2=situation, 3=companyId, 4=companyName,
+// 5=enterpriseId, 6=enterpriseName, 7=internalEnterpriseId,
+// 8=value, 9=totalSellingValue, 10=contractDate, ...
+const BI_SIT =2;   // situation
+const BI_EMP =6;   // enterpriseName
+const BI_VAL =9;   // totalSellingValue
+const BI_DAT =10;  // contractDate
+
+// BASE VENDAS BRUTO — colunas com nome confirmadas:
+// 0=Reserva,1=Aprovada,2=Data Venda,3=Data na Situação,4=Hora na Situação,
+// 5=Situação na data,6=Situação atual,7=Empreendimento,...
+const VI_SIT=5;  // Situação na data
+const VI_DAT=2;  // Data Venda
+
+// META VALOR — colunas confirmadas:
+// 0=Conta Financeira,1=Codigos,2=Conta,3=Tipo,4=Valores,
+// 5=Mês e Ano,6=Centro de Custo,7=Mês,8=Ano,9=CONJUNTO,
+// 10=GERAL,11=VENDAS,12=Status,13=Empreendimento 2
+const MI_VAL=4; const MI_MES=7; const MI_ANO=8; const MI_STAT=12; const MI_VEND=11;
+
+const MESES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const GC='rgba(255,255,255,0.06)',TC='#8892a4';
+const EC={SOL:'#e8a020',ORQUIDEAS:'#3b82f6',DECARLI:'#14b8a6',JUARA:'#a78bfa',VALE:'#27c97a',COLINA:'#f472b6',BOSQUE:'#fb923c',INTERLAGOS:'#94a3b8'};
+const EN={SOL:'Sol',ORQUIDEAS:'Orquídeas',DECARLI:'De Carli',JUARA:'Juara',VALE:'Vale',COLINA:'Colina',BOSQUE:'Bosque',INTERLAGOS:'Interlagos'};
+const EO=['SOL','ORQUIDEAS','DECARLI','JUARA','VALE','COLINA','BOSQUE','INTERLAGOS'];
+const OC={'BOSQUE':'#27c97a','ORQUÍDEAS MODULO 1':'#3b82f6','VALE':'#e8a020','ORQUÍDEAS MODULO 2':'#a78bfa','SOL':'#14b8a6'};
+let cMes=null,cVGV=null;
+
+function escala(){
+  const s=Math.min(window.innerWidth/1280,window.innerHeight/720);
+  document.getElementById('dash').style.transform=`translate(-50%,-50%) scale(${s})`;
+}
+window.addEventListener('resize',escala);
+function setStatus(t){document.getElementById('loading-status').textContent=t;}
+
+function jsonpGid(gid,cb){
+  return new Promise((res,rej)=>{
+    const to=setTimeout(()=>{delete window[cb];rej(new Error('Timeout GID='+gid));},25000);
+    window[cb]=(data)=>{clearTimeout(to);delete window[cb];res(data);};
+    const s=document.createElement('script');
+    s.src=`https://docs.google.com/spreadsheets/d/${SID}/gviz/tq?tqx=out:json;responseHandler:${cb}&gid=${gid}`;
+    s.onerror=()=>{clearTimeout(to);delete window[cb];rej(new Error('Erro script GID='+gid));};
+    document.head.appendChild(s);
+  });
+}
+
+function cv(c){return(c&&c.v!==undefined&&c.v!==null)?c.v:null;}
+
+function parseDate(raw){
+  if(!raw)return null;
+  if(raw instanceof Date)return raw;
+  if(typeof raw==='string'&&raw.startsWith('Date(')){
+    const p=raw.replace('Date(','').replace(')','').split(',');
+    return new Date(+p[0],+p[1],+(p[2]||1));
+  }
+  // string ISO "2026-04-22"
+  if(typeof raw==='string'&&raw.match(/^\d{4}-\d{2}-\d{2}/)){
+    return new Date(raw);
+  }
+  const d=new Date(raw);return isNaN(d)?null:d;
+}
+
+function normEmp(n){
+  if(!n)return'';const u=String(n).toUpperCase();
+  if(u.includes('SOL'))return'SOL';
+  if(u.includes('ORQUIDEAS')||u.includes('ORQUÍDEAS'))return'ORQUIDEAS';
+  if(u.includes('ARACRUZ')||u.includes('DE CARLI')||u.includes('DECARLI'))return'DECARLI';
+  if(u.includes('JUARA'))return'JUARA';
+  if(u.includes('VALE'))return'VALE';
+  if(u.includes('COLINA'))return'COLINA';
+  if(u.includes('BOSQUE'))return'BOSQUE';
+  if(u.includes('INTERLAGOS'))return'INTERLAGOS';
+  return'';
+}
+
+async function carregarDados(){
+  // ---- BASEAPI ----
+  setStatus('Carregando vendas (BASEAPI)...');
+  const base=await jsonpGid(GID_BASE,'cb_base');
+  const realMes=Array(12).fill(0),realEmpMes={},vgvEmp={};
+  for(const row of base.table.rows){
+    const cs=row.c;
+    if(!cs)continue;
+    const sit=cv(cs[BI_SIT]);
+    if(sit!=='Emitido')continue;
+    // contractDate vem como string "2026-04-22"
+    const rawDate=cv(cs[BI_DAT]);
+    const d=parseDate(rawDate);
+    if(!d||d.getFullYear()!==2026)continue;
+    const m=d.getMonth();
+    const emp=normEmp(cv(cs[BI_EMP]));
+    if(!emp)continue;
+    realMes[m]++;
+    if(!realEmpMes[emp])realEmpMes[emp]=Array(12).fill(0);
+    realEmpMes[emp][m]++;
+    vgvEmp[emp]=(vgvEmp[emp]||0)+(parseFloat(cv(cs[BI_VAL]))||0);
+  }
+
+  // ---- BASE VENDAS BRUTO ----
+  setStatus('Carregando projeções...');
+  const bvb=await jsonpGid(GID_BVB,'cb_bvb');
+  const metaMes=Array(12).fill(0);
+  for(const row of bvb.table.rows){
+    const cs=row.c;
+    if(!cs)continue;
+    const sit=cv(cs[VI_SIT]);
+    if(sit!=='Projetada')continue;
+    const d=parseDate(cv(cs[VI_DAT]));
+    if(!d||d.getFullYear()!==2026)continue;
+    metaMes[d.getMonth()]++;
+  }
+
+  // ---- EVOLUÇÃO OBRAS ----
+  setStatus('Carregando obras...');
+  const obras_raw=await jsonpGid(GID_OBRAS,'cb_obras');
+  const obras=[];
+  for(const row of obras_raw.table.rows){
+    const cs=row.c;
+    if(!cs||!cs[0])continue;
+    const nome=cv(cs[0]);
+    if(!nome)continue;
+    obras.push({nome:String(nome),pct:parseFloat(cv(cs[2]))||0});
+  }
+
+  return{realMes,realEmpMes,vgvEmp,metaMes,obras};
+}
+
+function renderDash(d){
+  const{realMes,realEmpMes,vgvEmp,metaMes,obras}=d;
+  const tR=realMes.reduce((a,b)=>a+b,0);
+  const tP=metaMes.reduce((a,b)=>a+b,0);
+  const mCR=Math.max(1,realMes.filter(v=>v>0).length);
+  const pA=metaMes.slice(0,mCR).reduce((a,b)=>a+b,0);
+  const at=pA>0?Math.round(tR/pA*100):0;
+  const fat=pA>0?tR/pA:0;
+  const tend=metaMes.map((p,i)=>realMes[i]>0?realMes[i]:Math.round(p*fat));
+
+  document.getElementById('kpi-vendas').textContent=tR.toLocaleString('pt-BR');
+  document.getElementById('kpi-proj').textContent=tP.toLocaleString('pt-BR');
+  document.getElementById('kpi-ating').textContent=at+'%';
+  document.getElementById('kpi-sub').textContent=`${tR} real vs ${pA} meta (Jan–${MESES[mCR-1]})`;
+  document.getElementById('clock').textContent='Atualizado: '+new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  if(cMes)cMes.destroy();
+  cMes=new Chart(document.getElementById('chartMes'),{type:'bar',
+    data:{labels:MESES,datasets:[
+      {label:'Realizado',data:realMes,backgroundColor:'#e8a020',borderRadius:3,order:2},
+      {label:'Meta',data:metaMes,backgroundColor:'rgba(59,130,246,0.22)',borderColor:'#3b82f6',borderWidth:1,borderRadius:3,order:3}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{color:TC,font:{size:10},maxRotation:0},grid:{color:GC},border:{color:'transparent'}},y:{ticks:{color:TC,font:{size:10}},grid:{color:GC},border:{color:'transparent'}}}}
+  });
+
+  const tb=document.getElementById('tendBody');tb.innerHTML='';
+  let tRt=0,tPt=0,tTt=0;
+  metaMes.forEach((p,i)=>{
+    const r=realMes[i],t=tend[i],h=r>0;tRt+=r;tPt+=p;tTt+=t;
+    const pct=p>0?Math.round(r/p*100):0;
+    const bW=Math.min(100,h?pct:50);
+    const bC=h?(pct>=100?'#27c97a':pct>=70?'#e8a020':'#e85050'):'#3b82f6';
+    const pBg=h?(pct>=100?'#0d3320':pct>=70?'#2d1f00':'#3a1010'):'#0d1a2d';
+    const pC=h?(pct>=100?'#27c97a':pct>=70?'#e8a020':'#e85050'):'#3b82f6';
+    tb.innerHTML+=`<tr><td style="color:${h?'#fff':TC}">${MESES[i]}</td><td style="color:${h?'#e8a020':TC};font-weight:${h?600:400}">${r||'—'}</td><td style="color:${TC}">${p}</td><td><span class="pct-badge" style="background:${pBg};color:${pC}">${h?pct+'%':'—'}</span></td><td><div class="bar-tend" style="width:${bW}%;max-width:55px;background:${bC};opacity:${h?1:0.4}"></div>${!h?`<span style="font-size:10px;color:#3b82f6;margin-left:2px">~${t}</span>`:''}</td></tr>`;
+  });
+  tb.innerHTML+=`<tr style="border-top:1px solid var(--border)"><td style="font-weight:700;color:#fff">TOTAL</td><td style="font-weight:700;color:#e8a020">${tRt}</td><td style="font-weight:600;color:${TC}">${tPt}</td><td><span class="pct-badge" style="background:#0d3320;color:#27c97a">${tPt>0?Math.round(tRt/tPt*100):0}%</span></td><td style="font-size:10px;color:#3b82f6">~${tTt}</td></tr>`;
+
+  const eb=document.getElementById('empBody');eb.innerHTML='';
+  EO.forEach(k=>{
+    const md=realEmpMes[k]||Array(12).fill(0);
+    const tot=md.reduce((a,b)=>a+b,0);
+    const cor=EC[k];
+    eb.innerHTML+=`<tr><td style="color:${cor};font-weight:600">${EN[k]}</td>${md.map(v=>v>0?`<td style="color:${cor};font-weight:500">${v}</td>`:`<td style="color:#1e293b">—</td>`).join('')}<td style="color:${cor};font-weight:700">${tot||'—'}</td></tr>`;
+  });
+  const totC=Array.from({length:12},(_,i)=>EO.reduce((s,k)=>s+(realEmpMes[k]?realEmpMes[k][i]:0),0));
+  eb.innerHTML+=`<tr style="border-top:1px solid var(--border)"><td style="font-weight:700;color:#fff">Total</td>${totC.map(v=>`<td style="font-weight:700;color:#e8edf4">${v||'—'}</td>`).join('')}<td style="font-weight:700;color:var(--gold)">${tR}</td></tr>`;
+
+  const rd=EO.map(k=>({key:k,tot:(realEmpMes[k]||[]).reduce((a,b)=>a+b,0)})).filter(e=>e.tot>0).sort((a,b)=>b.tot-a.tot);
+  const mxV=rd[0]?.tot||1;
+  const pc=['p1','p2','p3','','','','',''];
+  const rg=document.getElementById('rankingGrid');rg.innerHTML='';
+  rd.forEach((e,i)=>{rg.innerHTML+=`<div class="rank-card"><div class="rank-pos ${pc[i]}">${i+1}º</div><div class="rank-info"><div class="rank-nome">${EN[e.key]}</div><div class="rank-val" style="color:${EC[e.key]}">${e.tot}</div><div class="rank-bar-bg"><div class="rank-bar-fill" style="width:${Math.round(e.tot/mxV*100)}%;background:${EC[e.key]}"></div></div></div></div>`;});
+
+  const og=document.getElementById('obrasGrid');og.innerHTML='';
+  obras.forEach(o=>{
+    const cor=OC[o.nome.toUpperCase()]||'#94a3b8';
+    const p=Math.round(o.pct*100);
+    og.innerHTML+=`<div class="obra-row"><div class="obra-nome">${o.nome}</div><div class="obra-bar-bg"><div class="obra-bar-fill" style="width:${p}%;background:${cor}"></div></div><div class="obra-pct" style="color:${cor}">${p}%</div></div>`;
+  });
+
+  const vo=EO.filter(k=>vgvEmp[k]>0).sort((a,b)=>(vgvEmp[b]||0)-(vgvEmp[a]||0));
+  const vL=vo.map(k=>EN[k]),vV=vo.map(k=>Math.round((vgvEmp[k]||0)/1e5)/10),vC=vo.map(k=>EC[k]);
+  if(cVGV)cVGV.destroy();
+  cVGV=new Chart(document.getElementById('chartVGV'),{type:'bar',
+    data:{labels:vL,datasets:[{data:vV,backgroundColor:vC,borderRadius:4,barThickness:42}]},
+    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:22,bottom:2}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'R$'+ctx.raw+'M'}}},
+      scales:{x:{ticks:{color:'#fff',font:{size:12,weight:'700'},maxRotation:0,autoSkip:false},grid:{color:GC},border:{color:'transparent'}},y:{display:false,grid:{display:false},border:{display:false}}}},
+    plugins:[{id:'vl',afterDatasetsDraw(chart){
+      const{ctx}=chart;ctx.save();
+      chart.getDatasetMeta(0).data.forEach((bar,i)=>{
+        ctx.fillStyle='#e8edf4';ctx.font='700 13px "Barlow Condensed",sans-serif';
+        ctx.textAlign='center';ctx.textBaseline='bottom';
+        ctx.fillText('R$'+vV[i]+'M',bar.x,bar.y-4);
+      });ctx.restore();
+    }}]
+  });
+}
+
+async function init(){
+  try{
+    escala();
+    const dados=await carregarDados();
+    document.getElementById('loading').style.display='none';
+    document.getElementById('dash').style.display='grid';
+    escala();renderDash(dados);
+    setInterval(async()=>{try{renderDash(await carregarDados());}catch(e){console.warn(e);}},5*60*1000);
+  }catch(err){
+    document.getElementById('loading-status').textContent='Erro: '+err.message;
+    document.getElementById('loading-status').style.color='#e85050';
+    console.error(err);
+  }
+}
+init();
+</script>
+</body>
+</html>

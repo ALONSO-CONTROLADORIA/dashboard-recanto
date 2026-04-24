@@ -201,12 +201,14 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
         <div style="flex:1;position:relative;min-height:0"><canvas id="chartVGV"></canvas></div>
       </div>
       <!-- Tendência baixo full width -->
-      <div class="card-tend-p2">
+      <div class="card-tend-p2" id="cardTendP2">
         <div class="ctitle">Tendência — realizado × meta <b>Jan–Dez 2026</b></div>
-        <table class="tend-tbl-p2" style="width:100%">
-          <thead><tr><th>Mês</th><th>Real</th><th>Meta</th><th>Ating.</th><th>Tendência</th></tr></thead>
-          <tbody id="tendBody"></tbody>
-        </table>
+        <div id="tendWrap" style="flex:1;min-height:0;overflow:hidden;position:relative">
+          <table class="tend-tbl-p2" id="tendTbl" style="width:100%">
+            <thead><tr><th>Mês</th><th>Real</th><th>Meta</th><th>Ating.</th><th>Tendência</th></tr></thead>
+            <tbody id="tendBody"></tbody>
+          </table>
+        </div>
       </div>
       <!-- VGV total baixo direita -->
       <div class="card-vgv-total">
@@ -529,17 +531,35 @@ async function init(){
     document.getElementById('dash').style.display='block';
     escala();
     renderDash(dados);
+    ajustarTendencia();
     iniciarRotacao();
-    // Atualiza dados a cada 5 minutos
-    setInterval(async()=>{try{renderDash(await carregarDados());}catch(e){console.warn(e);}},5*60*1000);
+    setInterval(async()=>{try{renderDash(await carregarDados());ajustarTendencia();}catch(e){console.warn(e);}},5*60*1000);
   }catch(err){
     document.getElementById('loading-status').textContent='Erro: '+err.message;
     document.getElementById('loading-status').style.color='#e85050';
     console.error(err);
   }
 }
+
+// Reduz a fonte da tabela de tendência até ela caber sem cortar
+function ajustarTendencia(){
+  const wrap = document.getElementById('tendWrap');
+  const tbl  = document.getElementById('tendTbl');
+  if(!wrap||!tbl) return;
+  // Reset para tamanho máximo
+  tbl.style.fontSize = '13px';
+  // Reduz em 0.5px até caber
+  let size = 13;
+  while(tbl.scrollHeight > wrap.clientHeight && size > 8){
+    size -= 0.5;
+    tbl.style.fontSize = size + 'px';
+  }
+}
+// Reajusta ao redimensionar
+window.addEventListener('resize', ()=>setTimeout(ajustarTendencia, 350));
 init();
 </script>
 </body>
 </html>
+
 

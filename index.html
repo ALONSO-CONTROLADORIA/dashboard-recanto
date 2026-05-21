@@ -125,7 +125,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
     <div class="kpis">
       <div class="kpi" style="border-top:2px solid var(--gold)">
         <div class="kpi-label">Vendas realizadas</div>
-        <div class="kpi-val" style="color:var(--gold)"><span id="kpi-vendas">--</span> <span class="badge">Emitidos</span></div>
+        <div class="kpi-val" style="color:var(--gold)"><span id="kpi-vendas">--</span> <span class="badge">Emit. + Canc.</span></div>
       </div>
       <div class="kpi" style="border-top:2px solid var(--teal)">
         <div class="kpi-label">Projetado total 2026</div>
@@ -359,7 +359,7 @@ async function carregarDados(){
   const realMes=Array(12).fill(0),realEmpMes={},vgvEmp={};
   for(const row of base.table.rows){
     const cs=row.c;if(!cs)continue;
-    if(cv(cs[BI_SIT])!=='Emitido')continue;
+    const sit=cv(cs[BI_SIT]);if(sit!=='Emitido'&&sit!=='Cancelado')continue;
     const d=parseDate(cv(cs[BI_DAT]));
     if(!d||d.getFullYear()!==2026)continue;
     const m=d.getMonth(),emp=normEmp(cv(cs[BI_EMP]));

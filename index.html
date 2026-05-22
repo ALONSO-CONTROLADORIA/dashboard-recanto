@@ -14,6 +14,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 .page{background:var(--bg);width:1280px;height:720px;padding:10px;display:none;flex-direction:column;gap:6px;position:absolute;top:0;left:0;overflow:hidden}
 .page.active{display:flex}
 .topbar{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:5px;flex-shrink:0}
+.topbar-logo{height:48px;width:auto;display:block}
 .page-dots{display:flex;gap:6px;align-items:center}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .3s}
 .dot.active{background:var(--gold)}
@@ -25,11 +26,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 .kpi-val{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:700;line-height:1.1}
 .badge{font-size:13px;font-weight:600;padding:1px 7px;border-radius:20px;background:#0d3320;color:var(--green)}
 
-/* ===== GRID PÁGINA 1 =====
-   Mesma estrutura da p2: flex:1 + min-height:0
-   Col1 (320px): ranking (row1) | obras (row2)
-   Col2 (1fr):   gráfico mensal (row1) | tabela emp (row2)
-*/
+/* ===== GRID PÁGINA 1 ===== */
 .grid-p1{display:grid;grid-template-columns:300px 1fr;grid-template-rows:55% 45%;gap:6px;flex:1;min-height:0;overflow:hidden}
 .card-mes {grid-column:2;grid-row:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;flex-direction:column;overflow:hidden}
 .card-rank{grid-column:1;grid-row:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
@@ -37,10 +34,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 .card-tend{display:none}
 .card-obras{display:none}
 
-/* ===== GRID PÁGINA 2 =====
-   VGV gráfico (row1 full)
-   Tendência (row2 full width)
-*/
+/* ===== GRID PÁGINA 2 ===== */
 .grid-p2{display:grid;grid-template-columns:1fr 380px;grid-template-rows:35% 65%;gap:6px;flex:1;min-height:0}
 .card-vgv     {grid-column:1/3;grid-row:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;flex-direction:column}
 .card-tend-p2 {grid-column:1/3;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:4px 14px;display:flex;flex-direction:column;overflow:hidden}
@@ -49,7 +43,6 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 .ctitle{font-size:14px;color:#ffffff;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .ctitle b{font-family:'Barlow',sans-serif;font-size:13px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
 
-/* Obras */
 .obras-grid{display:flex;flex-direction:column;gap:8px}
 .obra-row{display:flex;align-items:center;gap:8px}
 .obra-nome{font-size:13px;color:#fff;font-weight:700;width:115px;flex-shrink:0}
@@ -57,26 +50,22 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 .obra-bar-fill{height:100%;border-radius:5px}
 .obra-pct{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;width:48px;text-align:right;color:#fff}
 
-/* Tabela empreendimentos */
 .tbl{width:100%;border-collapse:collapse;font-size:12px}
 .tbl th{font-weight:700;color:#fff;text-align:center;padding:2px 2px;border-bottom:1px solid var(--border);font-size:14px}
 .tbl th:first-child{text-align:left}
 .tbl td{text-align:center;padding:1px 2px;border-bottom:1px solid rgba(31,45,64,0.4);font-size:12px}
 .tbl td:first-child{text-align:left;color:#c4cdd8}
 
-/* Tendência */
 .tend-tbl{width:100%;border-collapse:collapse;font-size:11px}
 .tend-tbl th{font-weight:700;color:#fff;padding:3px 5px;border-bottom:1px solid var(--border);text-align:left;font-size:10px}
 .tend-tbl td{padding:3px 5px;border-bottom:1px solid rgba(31,45,64,0.4);vertical-align:middle;font-size:11px}
 .bar-tend{height:7px;border-radius:3px;display:inline-block;vertical-align:middle}
 .pct-badge{font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;display:inline-block}
-/* Tendência página 2 — sem scroll, fonte menor para caber 13 linhas */
 .tend-tbl-p2{width:100%;border-collapse:collapse}
 .tend-tbl-p2 th{font-weight:700;color:#fff;padding:1px 8px;border-bottom:1px solid var(--border);text-align:left;font-size:12px;line-height:1.2}
 .tend-tbl-p2 td{padding:1px 8px;border-bottom:1px solid rgba(31,45,64,0.3);vertical-align:middle;font-size:12px;line-height:1.2}
 .pct-badge{font-size:12px;font-weight:600;padding:1px 5px;border-radius:8px;display:inline-block}
 
-/* Ranking */
 .ranking{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
 .rank-card{background:#0d1628;border:1px solid var(--border);border-radius:6px;padding:6px 8px;display:flex;align-items:center;gap:5px;min-width:0}
 .rank-pos{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--muted);width:20px;flex-shrink:0}
@@ -87,7 +76,6 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 .rank-bar-bg{height:3px;background:#1f2d40;border-radius:2px;margin-top:2px}
 .rank-bar-fill{height:100%;border-radius:2px}
 
-/* VGV pct */
 .vgv-pct-grid{display:flex;flex-direction:column;gap:7px;flex:1}
 .vgv-pct-row{display:flex;align-items:center;gap:8px}
 .vgv-pct-nome{font-size:12px;color:#fff;font-weight:700;width:85px;flex-shrink:0}
@@ -96,6 +84,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 .vgv-pct-val{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;width:38px;text-align:right;color:#fff}
 
 .loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99;gap:16px}
+.loading-logo{height:80px;width:auto}
 .spinner{width:40px;height:40px;border:3px solid var(--border);border-top:3px solid var(--gold);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
@@ -103,7 +92,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 <body>
 
 <div class="loading" id="loading">
-  <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;color:#fff">RECANTO <span style="color:var(--gold)">CONSTRUTORA</span></div>
+  <img src="images/logo-recanto.png" alt="Recanto Construtora" class="loading-logo">
   <div class="spinner"></div>
   <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;color:var(--gold);letter-spacing:2px">Carregando dados...</div>
   <div style="font-size:13px;color:var(--muted)" id="loading-status">Conectando ao Google Sheets</div>
@@ -114,7 +103,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
   <!-- PÁGINA 1 -->
   <div class="page active" id="page1">
     <div class="topbar">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:23px;font-weight:700;letter-spacing:3px;color:#fff">RECANTO <span style="color:var(--gold)">CONSTRUTORA</span></div>
+      <img src="images/logo-recanto.png" alt="Recanto Construtora" class="topbar-logo">
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:23px;font-weight:700;color:var(--gold);letter-spacing:2px">DASHBOARD DE VENDAS 2026</div>
       <div style="display:flex;align-items:center;gap:12px">
         <div class="page-dots"><div class="dot active" id="dot1"></div><div class="dot" id="dot2"></div></div>
@@ -137,12 +126,10 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
       </div>
     </div>
     <div class="grid-p1">
-      <!-- Col 1 Row 1: Ranking -->
       <div class="card-rank">
         <div class="ctitle">Ranking de vendas <b>por empreendimento</b></div>
         <div class="ranking" id="rankingGrid"></div>
       </div>
-      <!-- Col 2 Row 1: Gráfico mensal -->
       <div class="card-mes">
         <div class="ctitle">Vendas por mês — quantidade <b>Real | Meta</b></div>
         <div style="display:flex;gap:14px;margin-bottom:4px;font-size:13px;color:var(--muted);flex-shrink:0">
@@ -151,12 +138,10 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
         </div>
         <div style="flex:1;position:relative;min-height:0"><canvas id="chartMes"></canvas></div>
       </div>
-      <!-- Col 1 Row 2: Obras -->
       <div style="grid-column:1;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;flex-direction:column;overflow:hidden">
         <div class="ctitle">Evolução obras <b>Fev/2026</b></div>
         <div class="obras-grid" id="obrasGrid" style="flex:1"></div>
       </div>
-      <!-- Col 2 Row 2: Tabela empreendimentos -->
       <div class="card-emp">
         <div class="ctitle">Vendas por empreendimento por mês <b>Real (Meta)</b></div>
         <div style="flex:1;overflow:hidden">
@@ -172,7 +157,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
   <!-- PÁGINA 2 -->
   <div class="page" id="page2">
     <div class="topbar">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;letter-spacing:3px;color:#fff">RECANTO <span style="color:var(--gold)">CONSTRUTORA</span></div>
+      <img src="images/logo-recanto.png" alt="Recanto Construtora" class="topbar-logo">
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;color:var(--gold);letter-spacing:2px">VGV — ANÁLISE POR EMPREENDIMENTO</div>
       <div style="display:flex;align-items:center;gap:12px">
         <div class="page-dots"><div class="dot" id="dot1b"></div><div class="dot active" id="dot2b"></div></div>
@@ -195,12 +180,10 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
       </div>
     </div>
     <div class="grid-p2">
-      <!-- VGV gráfico topo full width -->
       <div class="card-vgv">
         <div class="ctitle">VGV por empreendimento <b>R$ milhões — 2026</b></div>
         <div style="flex:1;position:relative;min-height:0"><canvas id="chartVGV"></canvas></div>
       </div>
-      <!-- Tendência baixo full width -->
       <div class="card-tend-p2" id="cardTendP2">
         <div class="ctitle">Tendência — realizado × meta <b>Jan–Dez 2026</b></div>
         <div id="tendWrap" style="flex:1;min-height:0;overflow:hidden;position:relative">
@@ -210,7 +193,6 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
           </table>
         </div>
       </div>
-      <!-- VGV total baixo direita -->
       <div class="card-vgv-total">
         <div id="vgvPctGrid" style="display:none"></div>
         <div style="text-align:center">
@@ -258,7 +240,7 @@ const OC={'BOSQUE':'#27c97a','ORQUÍDEAS MODULO 1':'#3b82f6','VALE':'#e8a020','O
 
 let cMes=null,cVGV=null;
 let paginaAtual=1;
-const TEMPO_PAGINA=20000; // 20 segundos por página
+const TEMPO_PAGINA=20000;
 let timerPagina=null,timerProgress=null;
 
 function escala(){
@@ -282,12 +264,10 @@ document.addEventListener('touchstart',telaCheia);
 
 function setStatus(t){document.getElementById('loading-status').textContent=t;}
 
-// Troca de página com barra de progresso
 function trocarPagina(){
   paginaAtual = paginaAtual===1 ? 2 : 1;
   document.getElementById('page1').classList.toggle('active', paginaAtual===1);
   document.getElementById('page2').classList.toggle('active', paginaAtual===2);
-  // dots
   document.getElementById('dot1').classList.toggle('active', paginaAtual===1);
   document.getElementById('dot2').classList.toggle('active', paginaAtual===2);
   document.getElementById('dot1b').classList.toggle('active', paginaAtual===1);
@@ -298,7 +278,6 @@ function trocarPagina(){
 function iniciarProgress(){
   const bar1=document.getElementById('progress');
   const bar2=document.getElementById('progress2');
-  // Reseta
   bar1.style.transition='none'; bar1.style.width='0%';
   bar2.style.transition='none'; bar2.style.width='0%';
   setTimeout(()=>{
@@ -315,7 +294,6 @@ function iniciarRotacao(){
   iniciarProgress();
 }
 
-// JSONP
 function jsonpGid(gid,cb){
   return new Promise((res,rej)=>{
     const to=setTimeout(()=>{delete window[cb];rej(new Error('Timeout GID='+gid));},25000);
@@ -390,7 +368,6 @@ async function carregarDados(){
     obras.push({nome:String(nome),pct:parseFloat(cv(cs[2]))||0});
   }
 
-  // META VGV — usar GID_META para pegar meta de valor
   setStatus('Carregando meta VGV...');
   const meta_raw=await jsonpGid(GID_META,'cb_meta');
   let metaVgvTotal=0;
@@ -418,14 +395,12 @@ function renderDash(d){
   const totalVgv=Object.values(vgvEmp).reduce((a,b)=>a+b,0);
   const now=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
 
-  // KPIs página 1
   document.getElementById('kpi-vendas').textContent=tR.toLocaleString('pt-BR');
   document.getElementById('kpi-proj').textContent=tP.toLocaleString('pt-BR');
   document.getElementById('kpi-ating').textContent=at+'%';
   document.getElementById('kpi-sub').textContent=`${tR} real vs ${pA} meta (Jan–${MESES[mCR-1]})`;
   document.getElementById('clock1').textContent='Atualizado: '+now;
 
-  // KPIs página 2
   const vgvM=Math.round(totalVgv/1e5)/10;
   document.getElementById('kpi-vgv-total').textContent='R$'+vgvM+'M';
   const empMaior=EO.filter(k=>vgvEmp[k]>0).sort((a,b)=>(vgvEmp[b]||0)-(vgvEmp[a]||0))[0];
@@ -434,14 +409,12 @@ function renderDash(d){
   document.getElementById('kpi-ticket').textContent='R$'+ticket.toLocaleString('pt-BR')+'K';
   document.getElementById('clock2').textContent='Atualizado: '+now;
 
-  // VGV big number
   document.getElementById('vgv-big').textContent='R$'+vgvM+'M';
   const pctVgv=metaVgvTotal>0?Math.round(totalVgv/metaVgvTotal*100):0;
   document.getElementById('vgv-pct-label').textContent=pctVgv+'%';
   document.getElementById('vgv-pct-bar').style.width=Math.min(pctVgv,100)+'%';
   document.getElementById('vgv-meta-label').textContent='vs Meta R$'+Math.round(metaVgvTotal/1e6)+'M';
 
-  // VGV % por empreendimento
   const vgvPctGrid=document.getElementById('vgvPctGrid');vgvPctGrid.innerHTML='';
   const vo=EO.filter(k=>vgvEmp[k]>0).sort((a,b)=>(vgvEmp[b]||0)-(vgvEmp[a]||0));
   vo.forEach(k=>{
@@ -454,7 +427,6 @@ function renderDash(d){
     </div>`;
   });
 
-  // Gráfico mensal
   if(cMes)cMes.destroy();
   cMes=new Chart(document.getElementById('chartMes'),{type:'bar',
     data:{labels:MESES,datasets:[
@@ -465,7 +437,6 @@ function renderDash(d){
       scales:{x:{ticks:{color:TC,font:{size:10},maxRotation:0},grid:{color:GC},border:{color:'transparent'}},y:{ticks:{color:TC,font:{size:10}},grid:{color:GC},border:{color:'transparent'}}}}
   });
 
-  // Tendência
   const tb=document.getElementById('tendBody');tb.innerHTML='';
   let tRt=0,tPt=0,tTt=0;
   metaMes.forEach((p,i)=>{
@@ -479,7 +450,6 @@ function renderDash(d){
   });
   tb.innerHTML+=`<tr style="border-top:1px solid var(--border)"><td style="font-weight:700;color:#fff">TOTAL</td><td style="font-weight:700;color:#e8a020">${tRt}</td><td style="font-weight:600;color:${TC}">${tPt}</td><td><span class="pct-badge" style="background:#0d3320;color:#27c97a">${tPt>0?Math.round(tRt/tPt*100):0}%</span></td><td style="font-size:10px;color:#3b82f6">~${tTt}</td></tr>`;
 
-  // Tabela empreendimentos
   const eb=document.getElementById('empBody');eb.innerHTML='';
   EO.forEach(k=>{
     const md=realEmpMes[k]||Array(12).fill(0);
@@ -489,14 +459,12 @@ function renderDash(d){
   const totC=Array.from({length:12},(_,i)=>EO.reduce((s,k)=>s+(realEmpMes[k]?realEmpMes[k][i]:0),0));
   eb.innerHTML+=`<tr style="border-top:1px solid var(--border)"><td style="font-weight:700;color:#fff">Total</td>${totC.map(v=>`<td style="font-weight:700;color:#e8edf4">${v||'—'}</td>`).join('')}<td style="font-weight:700;color:var(--gold)">${tR}</td></tr>`;
 
-  // Ranking
   const rd=EO.map(k=>({key:k,tot:(realEmpMes[k]||[]).reduce((a,b)=>a+b,0)})).filter(e=>e.tot>0).sort((a,b)=>b.tot-a.tot);
   const mxV=rd[0]?.tot||1;
   const pc=['p1','p2','p3','','','','',''];
   const rg=document.getElementById('rankingGrid');rg.innerHTML='';
   rd.forEach((e,i)=>{rg.innerHTML+=`<div class="rank-card"><div class="rank-pos ${pc[i]}">${i+1}º</div><div class="rank-info"><div class="rank-nome">${EN[e.key]}</div><div class="rank-val" style="color:${EC[e.key]}">${e.tot}</div><div class="rank-bar-bg"><div class="rank-bar-fill" style="width:${Math.round(e.tot/mxV*100)}%;background:${EC[e.key]}"></div></div></div></div>`;});
 
-  // Obras
   const og=document.getElementById('obrasGrid');og.innerHTML='';
   obras.forEach(o=>{
     const cor=OC[o.nome.toUpperCase()]||'#94a3b8';
@@ -504,7 +472,6 @@ function renderDash(d){
     og.innerHTML+=`<div class="obra-row"><div class="obra-nome">${o.nome}</div><div class="obra-bar-bg"><div class="obra-bar-fill" style="width:${p}%;background:${cor}"></div></div><div class="obra-pct" style="color:${cor}">${p}%</div></div>`;
   });
 
-  // VGV gráfico
   const vL=vo.map(k=>EN[k]),vV=vo.map(k=>Math.round((vgvEmp[k]||0)/1e5)/10),vC=vo.map(k=>EC[k]);
   if(cVGV)cVGV.destroy();
   cVGV=new Chart(document.getElementById('chartVGV'),{type:'bar',
@@ -541,23 +508,20 @@ async function init(){
   }
 }
 
-// Reduz a fonte da tabela de tendência até ela caber sem cortar
 function ajustarTendencia(){
   const wrap = document.getElementById('tendWrap');
   const tbl  = document.getElementById('tendTbl');
   if(!wrap||!tbl) return;
-  // Reset para tamanho máximo
   tbl.style.fontSize = '13px';
-  // Reduz em 0.5px até caber
   let size = 13;
   while(tbl.scrollHeight > wrap.clientHeight && size > 8){
     size -= 0.5;
     tbl.style.fontSize = size + 'px';
   }
 }
-// Reajusta ao redimensionar
 window.addEventListener('resize', ()=>setTimeout(ajustarTendencia, 350));
 init();
 </script>
 </body>
 </html>
+

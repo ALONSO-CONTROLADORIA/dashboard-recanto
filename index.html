@@ -95,7 +95,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
   <img src="images/logo-recanto.png" alt="Recanto Construtora" class="loading-logo">
   <div class="spinner"></div>
   <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;color:var(--gold);letter-spacing:2px">Carregando dados...</div>
-  <div style="font-size:13px;color:var(--muted)" id="loading-status">Conectando ao Google Sheets</div>
+  <div style="font-size:13px;color:var(--muted)" id="loading-status">Carregando dados...</div>
 </div>
 
 <div class="dash" id="dash" style="display:none">
@@ -221,15 +221,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 
 <script>
 
-const SID='1WAy449o_Dd2dIBP-45BbQNZ7UNV0wrvaVyXASAnf5Rw';
-const GID_BASE ='1098648263';
-const GID_BVB  ='658379198';
-const GID_OBRAS='1849109744';
-const GID_META ='718283599';
-
-const BI_SIT=2,BI_EMP=6,BI_VAL=9,BI_DAT=10;
-const VI_SIT=5,VI_DAT=2;
-const MI_VAL=4,MI_MES=7,MI_ANO=8,MI_STAT=12,MI_VEND=11;
+const DATA_URL='data.json';
 
 const MESES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 const GC='rgba(255,255,255,0.06)',TC='#8892a4';
@@ -294,93 +286,20 @@ function iniciarRotacao(){
   iniciarProgress();
 }
 
-function jsonpGid(gid,cb){
-  return new Promise((res,rej)=>{
-    const to=setTimeout(()=>{delete window[cb];rej(new Error('Timeout GID='+gid));},25000);
-    window[cb]=(data)=>{clearTimeout(to);delete window[cb];res(data);};
-    const s=document.createElement('script');
-    s.src=`https://docs.google.com/spreadsheets/d/${SID}/gviz/tq?tqx=out:json;responseHandler:${cb}&gid=${gid}`;
-    s.onerror=()=>{clearTimeout(to);delete window[cb];rej(new Error('Erro script GID='+gid));};
-    document.head.appendChild(s);
-  });
-}
-
-function cv(c){return(c&&c.v!==undefined&&c.v!==null)?c.v:null;}
-
-function parseDate(raw){
-  if(!raw)return null;
-  if(raw instanceof Date)return raw;
-  if(typeof raw==='string'&&raw.startsWith('Date(')){
-    const p=raw.replace('Date(','').replace(')','').split(',');
-    return new Date(+p[0],+p[1],+(p[2]||1));
-  }
-  if(typeof raw==='string'&&raw.match(/^\d{4}-\d{2}-\d{2}/))return new Date(raw);
-  const d=new Date(raw);return isNaN(d)?null:d;
-}
-
-function normEmp(n){
-  if(!n)return'';const u=String(n).toUpperCase();
-  if(u.includes('SOL'))return'SOL';
-  if(u.includes('ORQUIDEAS')||u.includes('ORQUÍDEAS'))return'ORQUIDEAS';
-  if(u.includes('ARACRUZ')||u.includes('DE CARLI')||u.includes('DECARLI'))return'DECARLI';
-  if(u.includes('JUARA'))return'JUARA';
-  if(u.includes('VALE'))return'VALE';
-  if(u.includes('COLINA'))return'COLINA';
-  if(u.includes('BOSQUE'))return'BOSQUE';
-  if(u.includes('INTERLAGOS'))return'INTERLAGOS';
-  return'';
-}
-
 async function carregarDados(){
-  setStatus('Carregando BASEAPI...');
-  const base=await jsonpGid(GID_BASE,'cb_base');
-  const realMes=Array(12).fill(0),realEmpMes={},vgvEmp={};
-  for(const row of base.table.rows){
-    const cs=row.c;if(!cs)continue;
-    const sit=cv(cs[BI_SIT]);if(sit!=='Emitido'&&sit!=='Cancelado')continue;
-    const d=parseDate(cv(cs[BI_DAT]));
-    if(!d||d.getFullYear()!==2026)continue;
-    const m=d.getMonth(),emp=normEmp(cv(cs[BI_EMP]));
-    if(!emp)continue;
-    realMes[m]++;
-    if(!realEmpMes[emp])realEmpMes[emp]=Array(12).fill(0);
-    realEmpMes[emp][m]++;
-    vgvEmp[emp]=(vgvEmp[emp]||0)+(parseFloat(cv(cs[BI_VAL]))||0);
-  }
-
-  setStatus('Carregando projeções...');
-  const bvb=await jsonpGid(GID_BVB,'cb_bvb');
-  const metaMes=Array(12).fill(0);
-  for(const row of bvb.table.rows){
-    const cs=row.c;if(!cs)continue;
-    if(cv(cs[VI_SIT])!=='Projetada')continue;
-    const d=parseDate(cv(cs[VI_DAT]));
-    if(!d||d.getFullYear()!==2026)continue;
-    metaMes[d.getMonth()]++;
-  }
-
-  setStatus('Carregando obras...');
-  const obras_raw=await jsonpGid(GID_OBRAS,'cb_obras');
-  const obras=[];
-  for(const row of obras_raw.table.rows){
-    const cs=row.c;if(!cs||!cs[0])continue;
-    const nome=cv(cs[0]);if(!nome)continue;
-    obras.push({nome:String(nome),pct:parseFloat(cv(cs[2]))||0});
-  }
-
-  setStatus('Carregando meta VGV...');
-  const meta_raw=await jsonpGid(GID_META,'cb_meta');
-  let metaVgvTotal=0;
-  for(const row of meta_raw.table.rows){
-    const cs=row.c;if(!cs)continue;
-    const ano=cv(cs[MI_ANO]);
-    const stat=cv(cs[MI_STAT]);
-    const vend=cv(cs[MI_VEND]);
-    const val=parseFloat(cv(cs[MI_VAL]))||0;
-    if(ano===2026&&stat==='Meta'&&vend==='VENDAS NOVAS')metaVgvTotal+=val;
-  }
-
-  return{realMes,realEmpMes,vgvEmp,metaMes,obras,metaVgvTotal};
+  setStatus('Carregando dados...');
+  const resp=await fetch(DATA_URL+'?t='+Date.now(),{cache:'no-store'});
+  if(!resp.ok)throw new Error('HTTP '+resp.status+' ao buscar data.json');
+  const d=await resp.json();
+  return{
+    realMes:d.realMes,
+    realEmpMes:d.realEmpMes,
+    vgvEmp:d.vgvEmp,
+    metaMes:d.metaMes,
+    obras:d.obras,
+    metaVgvTotal:d.metaVgvTotal,
+    geradoEm:d.geradoEm
+  };
 }
 
 function renderDash(d){

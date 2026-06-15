@@ -1,6 +1,7 @@
 {
   "ano": 2026,
-  "geradoEm": "2026-06-15T13:21:01-03:00",
+  "geradoEm": "2026-06-15T14:35:34-03:00",
+  "mesObrasLabel": "Jun/2026",
   "metaMes": [
     47,
     68,
@@ -18,27 +19,35 @@
   "metaVgvTotal": 18901700.0,
   "obras": [
     {
-      "nome": "BOSQUE",
-      "pct": 1.0
-    },
-    {
       "nome": "VALE",
-      "pct": 0.4485
+      "pct": 0.5509952190363164
     },
     {
       "nome": "ORQUÍDEAS MODULO 1",
-      "pct": 0.8057
+      "pct": 0.6082155821463582
     },
     {
       "nome": "ORQUÍDEAS MODULO 2",
-      "pct": 0.3882
+      "pct": 0.6082155821463582
     },
     {
       "nome": "SOL",
-      "pct": 0.2659
+      "pct": 0.1170019925441614
     },
     {
       "nome": "INTERLAGOS",
+      "pct": 0.08771845378706533
+    },
+    {
+      "nome": "AURORA",
+      "pct": 0.003057646788990826
+    },
+    {
+      "nome": "DECARLI",
+      "pct": 0.0
+    },
+    {
+      "nome": "JUARA",
       "pct": 0.0
     }
   ],

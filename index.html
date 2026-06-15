@@ -43,12 +43,12 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
 .ctitle{font-size:14px;color:#ffffff;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .ctitle b{font-family:'Barlow',sans-serif;font-size:13px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
 
-.obras-grid{display:flex;flex-direction:column;gap:8px}
-.obra-row{display:flex;align-items:center;gap:8px}
-.obra-nome{font-size:13px;color:#fff;font-weight:700;width:115px;flex-shrink:0}
-.obra-bar-bg{flex:1;height:10px;background:#1f2d40;border-radius:5px;overflow:hidden}
-.obra-bar-fill{height:100%;border-radius:5px}
-.obra-pct{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;width:48px;text-align:right;color:#fff}
+.obras-grid{display:flex;flex-direction:column;gap:4px;justify-content:space-around;height:100%}
+.obra-row{display:flex;align-items:center;gap:6px}
+.obra-nome{font-size:11px;color:#fff;font-weight:700;width:110px;flex-shrink:0;line-height:1.1}
+.obra-bar-bg{flex:1;height:8px;background:#1f2d40;border-radius:4px;overflow:hidden}
+.obra-bar-fill{height:100%;border-radius:4px}
+.obra-pct{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;width:42px;text-align:right;color:#fff}
 
 .tbl{width:100%;border-collapse:collapse;font-size:12px}
 .tbl th{font-weight:700;color:#fff;text-align:center;padding:2px 2px;border-bottom:1px solid var(--border);font-size:14px}
@@ -139,7 +139,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
         <div style="flex:1;position:relative;min-height:0"><canvas id="chartMes"></canvas></div>
       </div>
       <div style="grid-column:1;grid-row:2;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;flex-direction:column;overflow:hidden">
-        <div class="ctitle">Evolução obras <b>Fev/2026</b></div>
+        <div class="ctitle">Evolução obras <b id="obrasMes">--</b></div>
         <div class="obras-grid" id="obrasGrid" style="flex:1"></div>
       </div>
       <div class="card-emp">
@@ -228,7 +228,7 @@ const GC='rgba(255,255,255,0.06)',TC='#8892a4';
 const EC={SOL:'#e8a020',ORQUIDEAS:'#3b82f6',DECARLI:'#14b8a6',JUARA:'#a78bfa',VALE:'#27c97a',COLINA:'#f472b6',BOSQUE:'#fb923c',INTERLAGOS:'#94a3b8'};
 const EN={SOL:'Sol',ORQUIDEAS:'Orquídeas',DECARLI:'De Carli',JUARA:'Juara',VALE:'Vale',COLINA:'Colina',BOSQUE:'Bosque',INTERLAGOS:'Interlagos'};
 const EO=['SOL','ORQUIDEAS','DECARLI','JUARA','VALE','COLINA','BOSQUE','INTERLAGOS'];
-const OC={'BOSQUE':'#27c97a','ORQUÍDEAS MODULO 1':'#3b82f6','VALE':'#e8a020','ORQUÍDEAS MODULO 2':'#a78bfa','SOL':'#14b8a6'};
+const OC={'VALE':'#27c97a','ORQUÍDEAS MODULO 1':'#3b82f6','ORQUÍDEAS MODULO 2':'#a78bfa','SOL':'#e8a020','INTERLAGOS':'#94a3b8','AURORA':'#fb923c','DECARLI':'#14b8a6','JUARA':'#f472b6'};
 
 let cMes=null,cVGV=null;
 let paginaAtual=1;
@@ -298,6 +298,7 @@ async function carregarDados(){
     metaMes:d.metaMes,
     obras:d.obras,
     metaVgvTotal:d.metaVgvTotal,
+    mesObrasLabel:d.mesObrasLabel,
     geradoEm:d.geradoEm
   };
 }
@@ -385,6 +386,7 @@ function renderDash(d){
   rd.forEach((e,i)=>{rg.innerHTML+=`<div class="rank-card"><div class="rank-pos ${pc[i]}">${i+1}º</div><div class="rank-info"><div class="rank-nome">${EN[e.key]}</div><div class="rank-val" style="color:${EC[e.key]}">${e.tot}</div><div class="rank-bar-bg"><div class="rank-bar-fill" style="width:${Math.round(e.tot/mxV*100)}%;background:${EC[e.key]}"></div></div></div></div>`;});
 
   const og=document.getElementById('obrasGrid');og.innerHTML='';
+  const obrasMesEl=document.getElementById('obrasMes');if(obrasMesEl&&d.mesObrasLabel)obrasMesEl.textContent=d.mesObrasLabel;
   obras.forEach(o=>{
     const cor=OC[o.nome.toUpperCase()]||'#94a3b8';
     const p=Math.round(o.pct*100);

@@ -217,10 +217,9 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
     </div>
   </div>
 
-  <!-- PÁGINA 3 — VÍDEO (tela cheia, sem chrome, máxima área sem cortar/distorcer) -->
+  <!-- PÁGINA 3 — GIF (tela cheia, sem chrome, máxima área sem cortar/distorcer) -->
   <div class="page" id="page3" style="padding:0;background:#000">
-    <video id="videoInterstitial" src="videos/politica-qualidade.mp4" muted playsinline preload="auto" style="width:100%;height:100%;object-fit:contain;background:#000"></video>
-  </div>
+    <img id="gifInterstitial" src="midia/qualidade-recanto.gif" alt="Política da Qualidade" style="width:100%;height:100%;object-fit:contain;background:#000">
   </div>
 
 </div>
@@ -262,7 +261,16 @@ document.addEventListener('touchstart',telaCheia);
 
 function setStatus(t){document.getElementById('loading-status').textContent=t;}
 
-let timerVideoSafety=null;
+// qualidade-recanto.gif: 91 frames, 14.63s por loop (loop infinito) — se o arquivo mudar, reajustar aqui
+const TEMPO_GIF=14630;
+let timerGif=null;
+let gifReloadCounter=0;
+
+function tocarGif(){
+  // <img> de gif não expõe currentTime/ended — recarregar o src força reiniciar do frame 1
+  const img=document.getElementById('gifInterstitial');
+  img.src='midia/qualidade-recanto.gif?r='+(++gifReloadCounter);
+}
 
 function irParaPagina(n){
   paginaAtual = n;
@@ -274,15 +282,13 @@ function irParaPagina(n){
   ['dot3','dot3b'].forEach(id=>document.getElementById(id).classList.toggle('active', n===3));
 
   if(n===3){
-    // vídeo controla a própria duração — para o timer das páginas 1/2
+    // gif não tem duração detectável em JS — usa o tempo de 1 loop e para o timer das páginas 1/2
     if(timerPagina){clearInterval(timerPagina);timerPagina=null;}
-    const vid=document.getElementById('videoInterstitial');
-    try{vid.currentTime=0;}catch(e){}
-    vid.play().catch(()=>{});
-    // rede social de segurança: se o vídeo travar/falhar, não deixa o painel parado nele
-    if(timerVideoSafety)clearTimeout(timerVideoSafety);
-    timerVideoSafety=setTimeout(()=>irParaPagina(1), 5*60*1000);
+    tocarGif();
+    if(timerGif)clearTimeout(timerGif);
+    timerGif=setTimeout(()=>irParaPagina(1), TEMPO_GIF);
   }else{
+    if(timerGif){clearTimeout(timerGif);timerGif=null;}
     iniciarProgress();
     if(!timerPagina)timerPagina=setInterval(avancarAutomatico, TEMPO_PAGINA);
   }
@@ -311,15 +317,11 @@ function iniciarRotacao(){
 }
 
 (function(){
-  const vid=document.getElementById('videoInterstitial');
-  vid.addEventListener('ended',()=>{
-    if(timerVideoSafety){clearTimeout(timerVideoSafety);timerVideoSafety=null;}
-    irParaPagina(1);
-  });
-  vid.addEventListener('error',()=>{
-    console.warn('Vídeo institucional falhou ao carregar, pulando para a página 1');
-    if(timerVideoSafety){clearTimeout(timerVideoSafety);timerVideoSafety=null;}
-    irParaPagina(1);
+  const img=document.getElementById('gifInterstitial');
+  img.addEventListener('error',()=>{
+    console.warn('GIF institucional falhou ao carregar, pulando para a página 1');
+    if(timerGif){clearTimeout(timerGif);timerGif=null;}
+    if(paginaAtual===3)irParaPagina(1);
   });
 })();
 

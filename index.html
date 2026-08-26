@@ -290,8 +290,25 @@ function irParaPagina(n){
   }else if(n===4){
     // vídeo controla a própria duração via evento 'ended', não usa timerAvanco
     const vid=document.getElementById('videoInterstitial');
+    // ao terminar, o vídeo fica congelado no último frame. Se a gente
+    // mandar play() junto com currentTime=0, o navegador ainda não
+    // acabou de voltar pro frame 0 e aparece um flash do último frame
+    // antigo. Escondemos até o 'seeked' confirmar (com um timeout de
+    // segurança, caso currentTime já fosse 0 e o evento nunca dispare).
+    vid.style.visibility='hidden';
+    let jaRevelou=false;
+    function revelarEtocar(){
+      if(jaRevelou)return;
+      jaRevelou=true;
+      vid.style.visibility='visible';
+      vid.play().catch(()=>{});
+    }
+    vid.addEventListener('seeked', function onSeeked(){
+      vid.removeEventListener('seeked', onSeeked);
+      revelarEtocar();
+    });
     try{vid.currentTime=0;}catch(e){}
-    vid.play().catch(()=>{});
+    setTimeout(revelarEtocar, 400);
     // rede de segurança: se o vídeo travar/falhar, não deixa o painel parado nele
     if(timerVideoSafety)clearTimeout(timerVideoSafety);
     timerVideoSafety=setTimeout(()=>irParaPagina(1), 5*60*1000);

@@ -106,7 +106,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
       <img src="images/logo-recanto.png" alt="Recanto Construtora" class="topbar-logo">
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:23px;font-weight:700;color:var(--gold);letter-spacing:2px">DASHBOARD DE VENDAS 2026</div>
       <div style="display:flex;align-items:center;gap:12px">
-        <div class="page-dots"><div class="dot active" id="dot1"></div><div class="dot" id="dot2"></div><div class="dot" id="dot3"></div></div>
+        <div class="page-dots"><div class="dot active" id="dot1"></div><div class="dot" id="dot2"></div><div class="dot" id="dot3"></div><div class="dot" id="dot4"></div></div>
         <div style="font-size:12px;color:var(--muted)" id="clock1">--</div>
       </div>
     </div>
@@ -160,7 +160,7 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
       <img src="images/logo-recanto.png" alt="Recanto Construtora" class="topbar-logo">
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;color:var(--gold);letter-spacing:2px">VGV — ANÁLISE POR EMPREENDIMENTO</div>
       <div style="display:flex;align-items:center;gap:12px">
-        <div class="page-dots"><div class="dot" id="dot1b"></div><div class="dot active" id="dot2b"></div><div class="dot" id="dot3b"></div></div>
+        <div class="page-dots"><div class="dot" id="dot1b"></div><div class="dot active" id="dot2b"></div><div class="dot" id="dot3b"></div><div class="dot" id="dot4b"></div></div>
         <div style="font-size:12px;color:var(--muted)" id="clock2">--</div>
       </div>
     </div>
@@ -217,10 +217,14 @@ html,body{width:100%;height:100%;background:var(--bg);overflow:hidden}
     </div>
   </div>
 
-  <!-- PÁGINA 3 — VÍDEO (tela cheia, sem chrome, máxima área sem cortar/distorcer) -->
+  <!-- PÁGINA 3 — IMAGEM (tela cheia, sem chrome, máxima área sem cortar/distorcer) -->
   <div class="page" id="page3" style="padding:0;background:#000">
-    <video id="videoInterstitial" src="videos/politica-qualidade.mp4?v=2" muted playsinline preload="auto" style="width:100%;height:100%;object-fit:contain;background:#000"></video>
+    <img id="imagemInterstitial" src="images/objetivos-3-trimestre.png?v=1" alt="Objetivos 3º Trimestre 2026" style="width:100%;height:100%;object-fit:contain;background:#000">
   </div>
+
+  <!-- PÁGINA 4 — VÍDEO (tela cheia, sem chrome, máxima área sem cortar/distorcer) -->
+  <div class="page" id="page4" style="padding:0;background:#000">
+    <video id="videoInterstitial" src="videos/politica-qualidade.mp4?v=2" muted playsinline preload="auto" style="width:100%;height:100%;object-fit:contain;background:#000"></video>
   </div>
 
 </div>
@@ -238,8 +242,8 @@ const OC={'VALE':'#27c97a','ORQUÍDEAS MODULO 1':'#3b82f6','ORQUÍDEAS MODULO 2'
 
 let cMes=null,cVGV=null;
 let paginaAtual=1;
-const TEMPO_PAGINA=20000;
-let timerPagina=null,timerProgress=null;
+const TEMPO_PAGINA=20000; // páginas 1 e 2 (dashboards)
+const TEMPO_IMAGEM=12000; // página 3 (imagem estática)
 
 function escala(){
   const s=Math.min(window.innerWidth/1280,window.innerHeight/720);
@@ -263,34 +267,35 @@ document.addEventListener('touchstart',telaCheia);
 function setStatus(t){document.getElementById('loading-status').textContent=t;}
 
 let timerVideoSafety=null;
+let timerAvanco=null; // avança página 1->2->3; página 4 (vídeo) avança sozinha pelo evento 'ended'
 
 function irParaPagina(n){
   paginaAtual = n;
   document.getElementById('page1').classList.toggle('active', n===1);
   document.getElementById('page2').classList.toggle('active', n===2);
   document.getElementById('page3').classList.toggle('active', n===3);
+  document.getElementById('page4').classList.toggle('active', n===4);
   ['dot1','dot1b'].forEach(id=>document.getElementById(id).classList.toggle('active', n===1));
   ['dot2','dot2b'].forEach(id=>document.getElementById(id).classList.toggle('active', n===2));
   ['dot3','dot3b'].forEach(id=>document.getElementById(id).classList.toggle('active', n===3));
+  ['dot4','dot4b'].forEach(id=>document.getElementById(id).classList.toggle('active', n===4));
 
-  if(n===3){
-    // vídeo controla a própria duração — para o timer das páginas 1/2
-    if(timerPagina){clearInterval(timerPagina);timerPagina=null;}
+  if(timerAvanco){clearTimeout(timerAvanco);timerAvanco=null;}
+
+  if(n===1||n===2){
+    iniciarProgress();
+    timerAvanco=setTimeout(()=>irParaPagina(n===1?2:3), TEMPO_PAGINA);
+  }else if(n===3){
+    timerAvanco=setTimeout(()=>irParaPagina(4), TEMPO_IMAGEM);
+  }else if(n===4){
+    // vídeo controla a própria duração via evento 'ended', não usa timerAvanco
     const vid=document.getElementById('videoInterstitial');
     try{vid.currentTime=0;}catch(e){}
     vid.play().catch(()=>{});
-    // rede social de segurança: se o vídeo travar/falhar, não deixa o painel parado nele
+    // rede de segurança: se o vídeo travar/falhar, não deixa o painel parado nele
     if(timerVideoSafety)clearTimeout(timerVideoSafety);
     timerVideoSafety=setTimeout(()=>irParaPagina(1), 5*60*1000);
-  }else{
-    iniciarProgress();
-    if(!timerPagina)timerPagina=setInterval(avancarAutomatico, TEMPO_PAGINA);
   }
-}
-
-function avancarAutomatico(){
-  if(paginaAtual===1)irParaPagina(2);
-  else if(paginaAtual===2)irParaPagina(3);
 }
 
 function iniciarProgress(){
@@ -320,6 +325,10 @@ function iniciarRotacao(){
     console.warn('Vídeo institucional falhou ao carregar, pulando para a página 1');
     if(timerVideoSafety){clearTimeout(timerVideoSafety);timerVideoSafety=null;}
     irParaPagina(1);
+  });
+  document.getElementById('imagemInterstitial').addEventListener('error',()=>{
+    console.warn('Imagem institucional falhou ao carregar, pulando para o vídeo');
+    if(paginaAtual===3)irParaPagina(4);
   });
 })();
 

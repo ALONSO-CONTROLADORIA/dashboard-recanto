@@ -1,6 +1,6 @@
 {
   "ano": 2026,
-  "geradoEm": "2026-09-01T08:07:08-03:00",
+  "geradoEm": "2026-09-01T09:07:03-03:00",
   "mesObrasLabel": "Set/2026",
   "metaMes": [
     47,
@@ -20,27 +20,27 @@
   "obras": [
     {
       "nome": "VALE",
-      "pct": 0.4485
+      "pct": 0.5892394643750115
     },
     {
       "nome": "ORQUÍDEAS MODULO 1",
-      "pct": 0.8057
+      "pct": 0.5986813186813187
     },
     {
       "nome": "ORQUÍDEAS MODULO 2",
-      "pct": 0.3882
+      "pct": 0.6970016997466216
     },
     {
       "nome": "SOL",
-      "pct": 0.2659
+      "pct": 0.1664667766800077
     },
     {
       "nome": "INTERLAGOS",
-      "pct": 0.0
+      "pct": 0.115820455359427
     },
     {
       "nome": "AURORA",
-      "pct": 0.0
+      "pct": 0.02018313532110092
     },
     {
       "nome": "DECARLI",
@@ -48,7 +48,7 @@
     },
     {
       "nome": "JUARA",
-      "pct": 0.0
+      "pct": 0.04857677027613128
     }
   ],
   "realEmpMes": {
